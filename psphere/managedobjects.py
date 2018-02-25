@@ -134,13 +134,14 @@ class ManagedEntity(ExtensibleManagedObject):
                                        filter=filter,
                                        properties=properties)
 
-    def __cmp__(self, other):
-       if self.name == other.name:
-           return 0
-       if self.name < other.name:
-           return -1
-       if self.name > other.name:
-           return 1
+    def __eq__(self, other):
+       return self.name == other.name
+
+    def __lt__(self, other):
+        return self.name < other.name
+
+    def __gt__(self, other):
+        return self.name > other.name
 
 #    def __str__(self):
 #        return self.name
