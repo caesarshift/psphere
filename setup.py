@@ -41,7 +41,7 @@ else:
 
 def modify_specfile():
     cmd = (' sed -e "s/@VERSION@/%s/g" < python-psphere.spec.in ' % pkg_version) + " > python-psphere.spec"
-    print cmd
+    print(cmd)
     os.system(cmd)
 
 class sdist(_sdist):
