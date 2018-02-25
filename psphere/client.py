@@ -28,6 +28,7 @@ The main module for accessing a vSphere server.
 import logging
 import os
 import suds
+from suds import client, sudsobject
 import time
 
 from urllib.error import URLError

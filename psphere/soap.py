@@ -20,6 +20,7 @@ A leaky wrapper for the underlying suds library.
 import logging
 import urllib.request, urllib.error, urllib.parse
 import suds
+from suds import sudsobject, client
 
 from pprint import pprint
 
