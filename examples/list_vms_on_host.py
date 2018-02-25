@@ -20,6 +20,9 @@
 
 import sys
 
+import ssl
+ssl._create_default_https_context = ssl._create_unverified_context
+
 from psphere.client import Client
 from psphere.managedobjects import HostSystem
 
@@ -29,16 +32,16 @@ def main(options):
 
     print('Successfully connected to %s' % client.server)
 
-    # Get a HostSystem object representing the host
-    host = HostSystem.get(client, name=options.hostsystem)
+    host = HostSystem.all(client)
 
-    # Preload the name attribute of all items in the vm attribute. Read the
-    # manual as this significantly speeds up queries for ManagedObject's
-    host.preload("vm", properties=["name"])
+    for h in host:
+        # Preload the name attribute of all items in the vm attribute. Read the
+        # manual as this significantly speeds up queries for ManagedObject's
+        h.preload("vm", properties=["name", "guest"])
 
-    # Iterate over the items in host.vm and print their names
-    for vm in sorted(host.vm):
-        print(vm.name)
+        # Iterate over the items in host.vm and print their names
+        for vm in sorted(h.vm):
+            print("%s: %s" % (vm.name, vm.guest.guestState))
 
     # Close the connection
     client.logout()
@@ -53,8 +56,6 @@ if __name__ == "__main__":
                       help="The username used to connect to the server")
     parser.add_option("--password", dest="password",
                       help="The password used to connect to the server")
-    parser.add_option("--hostsystem", dest="hostsystem",
-                      help="The host from which to list VMs")
 
     (options, args) = parser.parse_args()
 
@@ -70,11 +71,6 @@ if __name__ == "__main__":
 
     if options.password is None:
         print("You must specify a password")
-        parser.print_help()
-        sys.exit(1)
-
-    if options.hostsystem is None:
-        print("You must specify a host system")
         parser.print_help()
         sys.exit(1)
 
