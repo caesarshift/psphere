@@ -633,7 +633,9 @@ class Client(suds.client.Client):
 
 class ExtraConfigPlugin(MessagePlugin):
     def addAttributeForValue(self, node):
-        if node.parent.name == 'extraConfig' and node.name == 'value':
-            node.set('xsi:type', 'xsd:string')
+        if hasattr(node.parent, 'name'):
+            if node.parent.name == 'extraConfig' and node.name == 'value':
+                node.set('xsi:type', 'xsd:string')
+
     def marshalled(self, context):
         context.envelope.walk(self.addAttributeForValue)
