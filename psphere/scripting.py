@@ -71,7 +71,7 @@ class BaseScript(object):
     def read_visdkrc(self):
         try:
             config = open(self.visdkrc)
-        except IOError, e:
+        except IOError as e:
             if e.errno == 2:
                 # Doesn't exist, ignore it
                 return None

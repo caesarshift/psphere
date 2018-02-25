@@ -30,7 +30,7 @@ import os
 import suds
 import time
 
-from urllib2 import URLError
+from urllib.error import URLError
 from suds.plugin import MessagePlugin
 from suds.transport import TransportError
 
@@ -114,7 +114,7 @@ class Client(suds.client.Client):
         self.si = ServiceInstance(mo_ref, self) 
         try:
             self.sc = self.si.RetrieveServiceContent()
-        except URLError, e:
+        except URLError as e:
             logger.critical("Failed to connect to %s" % self.server)
             logger.critical("urllib2 said: %s" % e.reason) 
             raise
@@ -573,7 +573,7 @@ class Client(suds.client.Client):
         property_spec = self.create('PropertySpec')
         property_spec.type = view_type
         property_spec.all = False
-        property_spec.pathSet = filter.keys()
+        property_spec.pathSet = list(filter.keys())
 
         pfs = self.get_search_filter_spec(begin_entity, property_spec)
 
